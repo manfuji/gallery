@@ -19,7 +19,7 @@ export const RegisterUser = async ({
   } catch (error: any) {
     showAlert({
       title: 'Register',
-      message: 'Registration failed try again in a minute',
+      message: 'Registration failed ,please check your details and try again',
     });
 
     console.log(JSON.stringify(error));

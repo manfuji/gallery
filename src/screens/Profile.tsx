@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Platform, Linking} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/core';
@@ -6,6 +7,8 @@ import {useNavigation} from '@react-navigation/core';
 import {Block, Button, Image, Text} from '../components/';
 import {useData, useTheme, useTranslation} from '../hooks/';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../context/AuthContext';
+import UserAvatar from '../hooks/avatar';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -14,6 +17,7 @@ const Profile = () => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const {assets, colors, sizes} = useTheme();
+  const {isAuthenticated, login, logout} = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(false);
   const [userDetails, setUserDetails] = useState<any>();
@@ -22,7 +26,7 @@ const Profile = () => {
     const user = await AsyncStorage.getItem('user');
     const userData = JSON.parse(user ?? '');
     setUserDetails(userData.user);
-    console.log('===============|||||||||||', userData);
+    console.log('===============|||||||||||', user);
 
     if (user) {
       setIsLogin(true);
@@ -33,7 +37,10 @@ const Profile = () => {
 
   useEffect(() => {
     getUser();
-  }, [isLogin, navigation]);
+    if (!isAuthenticated) {
+      navigation.navigate('Home');
+    }
+  }, [isAuthenticated, navigation]);
 
   // const handleNavigation = useCallback(
   //   (to) => {
@@ -50,21 +57,22 @@ const Profile = () => {
   const IMAGE_VERTICAL_MARGIN =
     (sizes.width - (IMAGE_VERTICAL_SIZE + sizes.sm) * 2) / 2;
 
-  const handleSocialLink = useCallback(
-    (type: 'twitter' | 'dribbble') => {
-      const url =
-        type === 'twitter'
-          ? `https://twitter.com/${user?.social?.twitter}`
-          : `https://dribbble.com/${user?.social?.dribbble}`;
+  const handleSocialLink = useCallback((type: 'twitter' | 'dribbble') => {
+    // const url =
+    //   type === 'twitter'
+    //     ? `https://twitter.com/${user?.social?.twitter}`
+    //     : `https://dribbble.com/${user?.social?.dribbble}`;
+    // try {
+    //   Linking.openURL(url);
+    // } catch (error) {
+    //   alert(`Cannot open URL: ${url}`);
+    // }
+  }, []);
 
-      try {
-        Linking.openURL(url);
-      } catch (error) {
-        alert(`Cannot open URL: ${url}`);
-      }
-    },
-    [user],
-  );
+  // const logout = () => {
+  //   AsyncStorage.removeItem('user');
+  //   navigation.navigate('Home');
+  // };
 
   return (
     <Block safe marginTop={sizes.md}>
@@ -99,12 +107,14 @@ const Profile = () => {
               </Text>
             </Button>
             <Block flex={0} align="center">
-              <Image
+              {/* <Image
                 width={64}
                 height={64}
                 marginBottom={sizes.sm}
                 source={{uri: user?.avatar}}
-              />
+              /> */}
+              <UserAvatar username={userDetails?.username!} />
+
               <Text h5 center white>
                 {userDetails?.username}
               </Text>
@@ -118,12 +128,8 @@ const Profile = () => {
                   marginHorizontal={sizes.sm}
                   color="rgba(255,255,255,0.2)"
                   outlined={String(colors.white)}
-                  onPress={() => handleSocialLink('twitter')}>
-                  <Ionicons
-                    size={18}
-                    name="logo-twitter"
-                    color={colors.white}
-                  />
+                  onPress={() => logout()}>
+                  <Ionicons size={18} name="log-out" color={colors.white} />
                 </Button>
                 <Button
                   shadow={false}
@@ -142,7 +148,7 @@ const Profile = () => {
           </Image>
 
           {/* profile: stats */}
-          <Block
+          {/* <Block
             flex={0}
             radius={sizes.sm}
             shadow={!isAndroid} // disabled shadow on Android due to blur overlay + elevation issue
@@ -173,7 +179,7 @@ const Profile = () => {
                 <Text>{t('profile.following')}</Text>
               </Block>
             </Block>
-          </Block>
+          </Block> */}
 
           {/* profile: about me */}
           <Block paddingHorizontal={sizes.sm}>

@@ -1,22 +1,22 @@
-# [Stepz React Native](https://demos.creative-tim.com/soft-ui-react-native/index.html) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/home?status=soft-ui%20React%20Native,%20a%20cool%20NowUI%20React%20Native%20App%20Template%20%E2%9D%A4%EF%B8%8F%20https%3A//bit.ly/2KAj86H%20%23reactnative%20%23NowUI%20%23designsystem%20%23developers%20via%20%40CreativeTim)
+# [ArtExhibit React Native](https://demos.creative-tim.com/soft-ui-react-native/index.html) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/home?status=soft-ui%20React%20Native,%20a%20cool%20NowUI%20React%20Native%20App%20Template%20%E2%9D%A4%EF%B8%8F%20https%3A//bit.ly/2KAj86H%20%23reactnative%20%23NowUI%20%23designsystem%20%23developers%20via%20%40CreativeTim)
 
 ![version](https://img.shields.io/badge/version-1.0.1-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/ct-soft-ui-react-native.svg?style=flat)](https://github.com/creativetimofficial/ct-soft-ui-react-native/issues?q=is%3Aopen+is%3Aissue) [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/ct-soft-ui-react-native.svg?maxAge=2592000)](https://github.com/creativetimofficial/ct-soft-ui-react-native/issues?q=is%3Aissue+is%3Aclosed)
 
 ![Product](https://s3.amazonaws.com/creativetim_bucket/products/490/original/opt_soft_ui_react_native_thumbnail.jpg)
 
-Stepz React Native is a fully coded app template built over [React Native](https://facebook.github.io/react-native/?ref=creativetim) and [Expo](https://expo.io/?ref=creativetim) to allow you to create powerful and beautiful e-commerce mobile applications. We have redesigned all the usual components in-house to make it look like Stepz's KIT, minimalistic and easy to use.
+ArtExhibit React Native is a fully coded app template built over [React Native](https://facebook.github.io/react-native/?ref=creativetim) and [Expo](https://expo.io/?ref=creativetim) to allow you to create powerful and beautiful e-commerce mobile applications. We have redesigned all the usual components in-house to make it look like ArtExhibit's KIT, minimalistic and easy to use.
 
-Start your development with a Design System for React Native inspired by Stepz KIT. If you like Stepz's KIT, you will love this react native app template! It features a huge number of components and screens built to fit together and look amazing.
+Start your development with a Design System for React Native inspired by ArtExhibit KIT. If you like ArtExhibit's KIT, you will love this react native app template! It features a huge number of components and screens built to fit together and look amazing.
 
 ### FULLY CODED COMPONENTS
 
-Stepz React Native features over 100 variations of components like buttons, inputs, cards, navigations etc, giving you the freedom of choosing and combining. All components can take variations in colour, that you can easily modify inside our theme file.
+ArtExhibit React Native features over 100 variations of components like buttons, inputs, cards, navigations etc, giving you the freedom of choosing and combining. All components can take variations in colour, that you can easily modify inside our theme file.
 
 You will save a lot of time going from prototyping to full-functional code, because all elements are implemented. We wanted the design process to be seamless, so switching from image to the real page is very easy to do.
 
 ### Components & Cards
 
-Stepz React Native comes packed with a large number of components and cards. Putting together a mobile app has never been easier than matching together different components. From the profile screen to a settings screen, you can easily customise and build your screens. We have created multiple options for you to put together and customise into pixel perfect screens.
+ArtExhibit React Native comes packed with a large number of components and cards. Putting together a mobile app has never been easier than matching together different components. From the profile screen to a settings screen, you can easily customise and build your screens. We have created multiple options for you to put together and customise into pixel perfect screens.
 
 View [all components here](https://demos.creative-tim.com/soft-ui-react-native/).
 
@@ -46,9 +46,9 @@ Let us know your thoughts below. And good luck with development!
 
 [<img src="https://github.com/creativetimofficial/public-assets/blob/master/logos/html-logo.jpg?raw=true" width="60" height="60" />](https://www.creative-tim.com/product/soft-ui-kit-pro)[<img src="https://github.com/creativetimofficial/public-assets/blob/master/logos/react-native-logo.jpg?raw=true" width="60" height="60" />](https://www.creative-tim.com/product/soft-ui-react-native)
 
-| HTML                                                                                                                                                                                | React-Native                                                                                                                                                                                            |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![Stepz Kit](https://s3.amazonaws.com/creativetim_bucket/products/448/original/opt_sds_free_thumbnail.jpg?1614876201)](https://www.creative-tim.com/product/soft-ui-design-system) | [![Stepz React-Native](https://s3.amazonaws.com/creativetim_bucket/products/490/original/opt_soft_ui_react_native_thumbnail.jpg?1625576346)](https://www.creative-tim.com/product/soft-ui-react-native) |
+| HTML                                                                                                                                                                                     | React-Native                                                                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [![ArtExhibit Kit](https://s3.amazonaws.com/creativetim_bucket/products/448/original/opt_sds_free_thumbnail.jpg?1614876201)](https://www.creative-tim.com/product/soft-ui-design-system) | [![ArtExhibit React-Native](https://s3.amazonaws.com/creativetim_bucket/products/490/original/opt_soft_ui_react_native_thumbnail.jpg?1625576346)](https://www.creative-tim.com/product/soft-ui-react-native) |
 
 ## Demo
 
@@ -64,7 +64,7 @@ Let us know your thoughts below. And good luck with development!
 
 ## Documentation
 
-The documentation for the Stepz React Native is hosted at our [website](https://www.creative-tim.com/learning-lab/react-native/overview/soft).
+The documentation for the ArtExhibit React Native is hosted at our [website](https://www.creative-tim.com/learning-lab/react-native/overview/soft).
 
 ## File Structure
 
@@ -143,13 +143,13 @@ At present, we officially aim to support the last two versions of the following 
 - License Agreement: <https://www.creative-tim.com/license>
 - Support: <https://www.creative-tim.com/contact-us>
 - Issues: [Github Issues Page](https://github.com/creativetimofficial/ct-soft-ui-react-native/issues)
-- [Stepz Design System](https://www.creative-tim.com/product/soft-ui-design-system?ref=soft-uiprn-readme) - For Front End Development
+- [ArtExhibit Design System](https://www.creative-tim.com/product/soft-ui-design-system?ref=soft-uiprn-readme) - For Front End Development
 
 ## Reporting Issues
 
-We use GitHub Issues as the official bug tracker for the Stepz React Native. Here are some advices for our users that want to report an issue:
+We use GitHub Issues as the official bug tracker for the ArtExhibit React Native. Here are some advices for our users that want to report an issue:
 
-1. Make sure that you are using the latest version of the Stepz React Native.
+1. Make sure that you are using the latest version of the ArtExhibit React Native.
 2. Providing us reproducible steps for the issue will shorten the time it takes for it to be fixed.
 3. Some issues may be browser specific, so specifying in what browser you encountered the issue might help.
 
@@ -181,4 +181,5 @@ Twitter: <https://twitter.com/CreativeTim>
 Facebook: <https://www.facebook.com/CreativeTim>
 Dribbble: <https://dribbble.com/creativetim>
 Instagram: <https://www.instagram.com/CreativeTimOfficial>
+
 # gallery

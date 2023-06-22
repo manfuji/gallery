@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {Articles, Components, Home, Profile, Register, Login} from '../screens';
@@ -6,6 +7,8 @@ import {useScreenOptions, useTranslation} from '../hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import CreatePost from '../screens/post/createPost';
+import detailsScreen from '../screens/art-details/detailsScreen';
+import {AuthContext} from '../context/AuthContext';
 
 const Stack = createStackNavigator();
 
@@ -14,29 +17,30 @@ export default () => {
   const screenOptions = useScreenOptions();
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigation();
+  const {isAuthenticated, login, logout} = useContext(AuthContext);
 
-  const getUser = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const userData = JSON.parse(user ?? '');
+  // const getUser = async () => {
+  //   const user = await AsyncStorage.getItem('user');
+  //   const userData = JSON.parse(user ?? '');
 
-    console.log('===============|||||||||||', userData);
+  //   console.log('===============|||||||||||', userData);
 
-    if (user) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  };
+  //   if (user) {
+  //     setIsLogin(true);
+  //   } else {
+  //     setIsLogin(false);
+  //   }
+  // };
 
   useEffect(() => {
-    getUser();
+    // getUser();
 
-    if (isLogin) {
+    if (isAuthenticated) {
       navigation.navigate('Home');
     }
 
-    console.log('=======', isLogin);
-  }, [isLogin, navigation]);
+    console.log('=======', isAuthenticated);
+  }, [isAuthenticated, navigation]);
   return (
     <Stack.Navigator screenOptions={screenOptions.stack}>
       <Stack.Screen
@@ -44,8 +48,12 @@ export default () => {
         component={Home}
         options={{title: t('navigation.home')}}
       />
-
-      {isLogin ? (
+      <Stack.Screen
+        name="Detail"
+        component={detailsScreen}
+        options={{headerShown: false}}
+      />
+      {isAuthenticated ? (
         <>
           <Stack.Screen
             name="Components"
@@ -58,8 +66,6 @@ export default () => {
             component={Articles}
             options={{title: t('navigation.articles')}}
           />
-
-          {/* <Stack.Screen name="Pro" component={Pro} options={screenOptions.pro} /> */}
 
           <Stack.Screen
             name="Profile"

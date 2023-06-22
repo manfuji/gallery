@@ -1,52 +1,96 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {ActivityIndicator, FlatList, View} from 'react-native';
 
 import {useData, useTheme, useTranslation} from '../hooks/';
 import {IArticle, ICategory} from '../constants/types';
 import {Block, Button, Article, Text, Input} from '../components/';
 import {category as CategoryData} from '../services/api/category/base';
 import {fetchProducts} from '../services/api/products/base';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Home = () => {
   const [selected, setSelected] = useState<ICategory>();
   const [articles, setArticles] = useState<IArticle[]>([]);
+  const [filteredArticles, setFilteredArticles] =
+    useState<IArticle[]>(articles);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {colors, gradients, sizes} = useTheme();
   const {t} = useTranslation();
 
   const loadCategories = async () => {
     const res = await CategoryData();
-    setCategories(res);
+    setCategories([...[{catName: 'All', id: 123}], ...res]);
     console.log(res);
   };
 
   const loadProducts = async () => {
+    setIsLoading(true);
+
     const res = await fetchProducts();
     setArticles(res);
+    setFilteredArticles(res);
     console.log(res);
+    setIsLoading(false);
   };
 
   // init articles
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   loadCategories();
+  //   // const categories = CategoryData();
+  //   // setArticles(data?.articles);
+  //   loadProducts();
+  //   // setCategories(data?.categories
+  //   setSelected({catName: 'All', id: 123});
+  //   setIsLoading(false);
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Side effect logic here
+      // Runs when the screen comes into focus
+      // Clean up logic can be handled here as well
+      setIsLoading(true);
+      loadCategories();
+      // const categories = CategoryData();
+      // setArticles(data?.articles);
+      loadProducts();
+      // setCategories(data?.categories
+      setSelected({catName: 'All', id: 123});
+      setIsLoading(false);
+      console.log('running');
+      return () => {
+        // Clean up logic here
+        // Runs when the screen goes out of focus
+      };
+    }, []),
+  );
+
+  // // update articles on category change
   useEffect(() => {
-    loadCategories();
-    // const categories = CategoryData();
-    // setArticles(data?.articles);
-    loadProducts();
-    // setCategories(data?.categories
-    setSelected(categories[0]);
-  }, []);
+    setIsLoading(true);
+    // setFilteredArticles(articles);
 
-  // update articles on category change
-  useEffect(() => {
-    const category = categories?.find((cat) => cat?.id === selected?.id);
+    if (selected?.id === 123) {
+      setFilteredArticles(articles);
+      console.log('clicked all', articles);
+    } else {
+      const category = categories?.find((cat) => cat?.id === selected?.id);
 
-    const newArticles = articles?.filter(
-      (article) => article?.category === category?.catName,
-    );
+      const newArticles = articles?.filter(
+        (article) => article?.category === category?.catName,
+      );
 
-    setArticles(newArticles);
-  }, [categories, selected, articles]);
+      setFilteredArticles(newArticles);
+      console.log('clicked two', newArticles);
+    }
+    setIsLoading(false);
+  }, [categories, selected]);
+
+  console.log('slected', selected);
 
   return (
     <Block className="px-10">
@@ -92,8 +136,18 @@ const Home = () => {
           })}
         </Block>
       </Block>
+
+      {isLoading && <ActivityIndicator size={30} color={'green'} />}
+      {filteredArticles.length < 1 && (
+        <View className="flex h-96 text-center w-[90%] items-center justify-center">
+          <Text p semibold className="text-3xl font-bold">
+            No post for {selected?.catName}
+          </Text>
+        </View>
+      )}
       <FlatList
-        data={articles}
+        data={filteredArticles}
+        inverted
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => `${item?.id}`}
         style={{paddingHorizontal: sizes.padding}}

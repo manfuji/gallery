@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Alert, Animated, Linking, StyleSheet} from 'react-native';
 
 import {
@@ -15,6 +21,7 @@ import Screens from './Screens';
 import {Block, Text, Switch, Button, Image} from '../components';
 import {useData, useTheme, useTranslation} from '../hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../context/AuthContext';
 
 const Drawer = createDrawerNavigator();
 
@@ -75,56 +82,39 @@ const DrawerContent = (
   const {assets, colors, gradients, sizes} = useTheme();
   const labelColor = colors.text;
   const [isLogin, setIsLogin] = useState(false);
-
-  const getUser = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const userData = JSON.parse(user ?? '');
-
-    console.log('===============|||||||||||', userData);
-
-    if (user) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  };
+  const {isAuthenticated, login, logout} = useContext(AuthContext);
 
   useEffect(() => {
-    getUser();
+    // getUser();
 
-    if (isLogin) {
+    if (isAuthenticated) {
       navigation.navigate('Home');
     }
-  }, [isLogin, navigation]);
+  }, [isAuthenticated, navigation]);
   const handleNavigation = useCallback(
-    (to) => {
+    (to: any) => {
       setActive(to);
       navigation.navigate(to);
     },
     [navigation, setActive],
   );
 
-  const handleWebLink = useCallback((url) => Linking.openURL(url), []);
+  // const handleWebLink = useCallback((url) => Linking.openURL(url), []);
   const protectedScreens = [
     {name: t('screens.home'), to: 'Home', icon: assets.home},
-    // {name: t('screens.components'), to: 'Components', icon: assets.components},
-    // {name: t('screens.articles'), to: 'Articles', icon: assets.document},
-    // {name: t('screens.rental'), to: 'Pro', icon: assets.rental},
     {name: t('screens.profile'), to: 'Profile', icon: assets.profile},
     {name: 'Create artifact', to: 'Artifact', icon: assets.hotel},
-    // {name: t('screens.settings'), to: 'Pro', icon: assets.settings},
   ];
 
   const authScreens = [
     {name: t('screens.home'), to: 'Home', icon: assets.home},
-
     {name: t('screens.register'), to: 'Register', icon: assets.profile},
     {name: t('screens.login'), to: 'Login', icon: assets.users},
     // {name: t('screens.extra'), to: 'Pro', icon: assets.extras},
   ];
 
   // screen list for Drawer menu
-  const screens = [...(isLogin ? protectedScreens : authScreens)];
+  const screens = [...(isAuthenticated ? protectedScreens : authScreens)];
 
   return (
     <DrawerContentScrollView
@@ -137,7 +127,7 @@ const DrawerContent = (
         <Block flex={0} row align="center" marginBottom={sizes.l}>
           <Block>
             <Text size={12} semibold>
-              Gallery
+              ArtExhibit
             </Text>
           </Block>
         </Block>
@@ -162,6 +152,7 @@ const DrawerContent = (
                 gradient={gradients[isActive ? 'primary' : 'white']}>
                 <Image
                   radius={0}
+                  // @ts-ignore
                   width={14}
                   height={14}
                   source={screen.icon}

@@ -24,11 +24,17 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#CB0C9F"
-      }
+        "backgroundColor": "#ffff"
+      },
+      "package": "com.manfuji.Gallery"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "da171935-bc92-4a9c-895b-73dcd9877b67"
+      }
     }
   },
   "plugins": [

@@ -31,7 +31,9 @@ export default () => {
     headerRightContainerStyle: {paddingRight: sizes.s},
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerTitle: ({children}: StackHeaderTitleProps) => (
-      <Text p>{children}</Text>
+      <Text center p bold primary>
+        {children}
+      </Text>
     ),
     headerLeft: () => (
       <Button onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -40,11 +42,11 @@ export default () => {
     ),
     headerRight: () => (
       <Block row flex={0} align="center" marginRight={sizes.padding}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{marginRight: sizes.sm}}
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Pro',
+              screen: 'Home',
             })
           }>
           <Image source={icons.bell} radius={0} color={colors.icon} />
@@ -61,7 +63,7 @@ export default () => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Screens', {
-              screen: 'Pro',
+              screen: 'Home',
             })
           }>
           <Image source={icons.basket} radius={0} color={colors.icon} />
@@ -80,7 +82,7 @@ export default () => {
               3
             </Text>
           </Block>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </Block>
     ),
   } as StackHeaderOptions;

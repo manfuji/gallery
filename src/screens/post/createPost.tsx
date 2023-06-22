@@ -8,6 +8,7 @@ import {
   Button as Btn,
   ScrollView,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {useData, useTheme, useTranslation} from '../../hooks/';
@@ -52,7 +53,7 @@ const CreatePost = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [imageToUpload, setImageToUpload] = useState(null);
   const [image, setImage] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const getUser = async () => {
     const user = await AsyncStorage.getItem('user');
     const userData = JSON.parse(user ?? '');
@@ -87,13 +88,14 @@ const CreatePost = () => {
   const {assets, colors, gradients, sizes} = useTheme();
 
   const handleChange = useCallback(
-    (value) => {
+    (value: any) => {
       setRegistration((state) => ({...state, ...value}));
     },
     [setRegistration],
   );
 
   const handleSignUp = useCallback(async () => {
+    setIsLoading(true);
     if (!Object.values(isValid).includes(false)) {
       /** send/save registration data */
       console.log('handleSignUp', registration);
@@ -127,6 +129,8 @@ const CreatePost = () => {
       // @ts-ignore
       formData.append('image', {
         uri: fileInfo.uri,
+        // @ts-ignore
+
         name: `${fileInfo.modificationTime}image.${imageType}`,
         type: `image/${imageType}`,
       });
@@ -147,10 +151,16 @@ const CreatePost = () => {
         //   status: '',
         //   category: selected?.id,
         // });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
+        setIsLoading(false);
+
         showAlert({title: 'Product', message: 'Product creation failed'});
       }
     } else {
+      setIsLoading(false);
+
       showAlert({title: 'Product', message: 'All fields are required'});
     }
   }, [isValid, registration, image, selected]);
@@ -169,8 +179,9 @@ const CreatePost = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
+    // @ts-ignore
     if (!result.cancelled) {
+      // @ts-ignore
       const fileInfo = await FileSystem.getInfoAsync(result.uri);
       setImage(fileInfo.uri);
     }
@@ -362,28 +373,20 @@ const CreatePost = () => {
                 </Block>
               </View>
               {/* checkbox terms */}
-
-              <Button
-                onPress={handleSignUp}
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                gradient={gradients.primary}
-                disabled={Object.values(isValid).includes(false)}>
-                <Text bold white transform="uppercase">
-                  {t('common.signup')}
-                </Text>
-              </Button>
-              <Button
-                primary
-                outlined
-                shadow={!isAndroid}
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                onPress={() => navigation.navigate('Login')}>
-                <Text bold primary transform="uppercase">
-                  {t('common.signin')}
-                </Text>
-              </Button>
+              {isLoading ? (
+                <ActivityIndicator color={'green'} size={30} />
+              ) : (
+                <Button
+                  onPress={handleSignUp}
+                  marginVertical={sizes.s}
+                  marginHorizontal={sizes.sm}
+                  gradient={gradients.primary}
+                  disabled={Object.values(isValid).includes(false)}>
+                  <Text bold white transform="uppercase">
+                    {'Create Artefact'}
+                  </Text>
+                </Button>
+              )}
             </Block>
           </Block>
         </ScrollView>

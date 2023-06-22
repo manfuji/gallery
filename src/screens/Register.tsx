@@ -1,5 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Linking, Platform, ScrollView} from 'react-native';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {ActivityIndicator, Linking, Platform, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import {useData, useTheme, useTranslation} from '../hooks/';
@@ -9,6 +10,7 @@ import {showAlert} from '../hooks/toastMesasage';
 import {View} from 'native-base';
 import {RegisterUser} from '../services/api/auth/register/base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../context/AuthContext';
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const isAndroid = Platform.OS === 'android';
 
@@ -31,29 +33,31 @@ const Register = () => {
   const {isDark} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const {isAuthenticated, login, logout} = useContext(AuthContext);
 
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
 
-  const getUser = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const userData = JSON.parse(user ?? '');
+  // const getUser = async () => {
+  //   const user = await AsyncStorage.getItem('user');
+  //   const userData = JSON.parse(user ?? '');
 
-    console.log('===============|||||||||||', userData);
+  //   console.log('===============|||||||||||', userData);
 
-    if (user) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  };
+  //   if (user) {
+  //     setIsLogin(true);
+  //   } else {
+  //     setIsLogin(false);
+  //   }
+  // };
 
   useEffect(() => {
-    getUser();
+    // getUser();
 
-    if (isLogin) {
+    if (isAuthenticated) {
       navigation.navigate('Home');
     }
-  }, [isLogin, navigation]);
+  }, [isAuthenticated, navigation]);
 
   const [isValid, setIsValid] = useState<IRegistrationValidation>({
     name: false,
@@ -67,18 +71,19 @@ const Register = () => {
     email: '',
     password: '',
     // confirmPassword: '',
-    agreed: false,
+    agreed: true,
   });
   const {assets, colors, gradients, sizes} = useTheme();
 
   const handleChange = useCallback(
-    (value) => {
+    (value: any) => {
       setRegistration((state) => ({...state, ...value}));
     },
     [setRegistration],
   );
 
   const handleSignUp = useCallback(async () => {
+    setIsLoading(true);
     if (!Object.values(isValid).includes(false)) {
       /** send/save registratin data */
       console.log('handleSignUp', registration);
@@ -88,11 +93,16 @@ const Register = () => {
         email: registration.email,
         password: registration.password,
       });
-
+      setIsLoading(false);
       console.log('=============>>>>>>>', userData);
     } else {
-      // console.log('handleSignUp', );
-      showAlert({title: 'Register', message: 'All fields are required'});
+      setIsLoading(false);
+
+      showAlert({
+        title: 'Register',
+        message:
+          'All fields are required and the password must container numbers and special characters',
+      });
     }
   }, [isValid, registration]);
 
@@ -250,20 +260,6 @@ const Register = () => {
                     success={Boolean(registration.password && isValid.password)}
                     danger={Boolean(registration.password && !isValid.password)}
                   />
-                  {/* <Input
-                    secureTextEntry
-                    autoCapitalize="none"
-                    marginBottom={sizes.m}
-                    label={t('common.confirmPassword')}
-                    placeholder={t('common.confirmPasswordPlaceholder')}
-                    onChangeText={(value) => handleChange({password: value})}
-                    success={Boolean(
-                      registration.confirmPassword && isValid.confirmPassword,
-                    )}
-                    danger={Boolean(
-                      registration.confirmPassword && !isValid.confirmPassword,
-                    )}
-                  /> */}
                 </Block>
               </View>
               {/* checkbox terms */}
@@ -278,22 +274,27 @@ const Register = () => {
                   <Text
                     semibold
                     onPress={() => {
-                      Linking.openURL('https://www.creative-tim.com/terms');
+                      Linking.openURL('/');
                     }}>
                     {t('common.terms')}
                   </Text>
                 </Text>
               </Block>
-              <Button
-                onPress={handleSignUp}
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                gradient={gradients.primary}
-                disabled={Object.values(isValid).includes(false)}>
-                <Text bold white transform="uppercase">
-                  {t('common.signup')}
-                </Text>
-              </Button>
+
+              {isLoading ? (
+                <ActivityIndicator size={30} color={'green'} />
+              ) : (
+                <Button
+                  onPress={handleSignUp}
+                  marginVertical={sizes.s}
+                  marginHorizontal={sizes.sm}
+                  gradient={gradients.primary}
+                  disabled={Object.values(isValid).includes(false)}>
+                  <Text bold white transform="uppercase">
+                    {t('common.signup')}
+                  </Text>
+                </Button>
+              )}
               <Button
                 primary
                 outlined

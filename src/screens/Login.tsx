@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
-import {Linking, Platform, ScrollView} from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import {ActivityIndicator, Linking, Platform, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
 import {useData, useTheme, useTranslation} from '../hooks';
@@ -10,6 +16,7 @@ import {showAlert} from '../hooks/toastMesasage';
 import {View} from 'native-base';
 import Storage from '@react-native-async-storage/async-storage';
 import {LoginUser} from '../services/api/auth/login/base';
+import {AuthContext} from '../context/AuthContext';
 const isAndroid = Platform.OS === 'android';
 
 interface ILogin {
@@ -25,29 +32,30 @@ const Login = () => {
   const {isDark} = useData();
   const {t} = useTranslation();
   const navigation = useNavigation();
-
+  const {isAuthenticated, login, logout} = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(false);
 
-  const getUser = async () => {
-    const user = await Storage.getItem('user');
-    const userData = JSON.parse(user ?? '');
+  const [isLoading, setIsLoading] = useState(false);
+  // const getUser = async () => {
+  //   const user = await Storage.getItem('user');
+  //   const userData = JSON.parse(user ?? '');
 
-    console.log('===============|||||||||||', userData);
+  //   console.log('===============|||||||||||', userData);
 
-    if (user) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  };
+  //   if (user) {
+  //     setIsLogin(true);
+  //   } else {
+  //     setIsLogin(false);
+  //   }
+  // };
 
   useEffect(() => {
-    getUser();
+    // getUser();
 
-    if (isLogin) {
+    if (isAuthenticated) {
       navigation.navigate('Home');
     }
-  }, [isLogin, navigation]);
+  }, [isAuthenticated, navigation]);
 
   const [isValid, setIsValid] = useState<ILoginValidation>({
     name: false,
@@ -60,27 +68,35 @@ const Login = () => {
   const {assets, colors, gradients, sizes} = useTheme();
 
   const handleChange = useCallback(
-    (value) => {
+    (value: any) => {
       setRegistration((state) => ({...state, ...value}));
     },
     [setRegistration],
   );
 
   const handleSignUp = useCallback(async () => {
+    setIsLoading(true);
     if (!Object.values(isValid).includes(false)) {
       /** send/save registratin data */
       console.log('handleSignUp', registration);
-
-      const userData = await LoginUser({
-        username: registration.name,
-        password: registration.password,
-      });
-      Storage.setItem('user', JSON.stringify(userData));
-      showAlert({title: 'Login', message: 'Login successful'});
-      navigation.navigate('Home');
-      console.log('=============>>>>>>>', userData);
+      try {
+        const userData = await LoginUser({
+          username: registration.name,
+          password: registration.password,
+        });
+        Storage.setItem('user', JSON.stringify(userData));
+        setIsLoading(false);
+        login();
+        navigation.navigate('Home');
+        console.log('=============>>>>>>>', userData);
+      } catch (error) {
+        setIsLoading(false);
+        // showAlert({title: 'Login', message: 'Invalid Credentials'});
+      }
     } else {
       // console.log('handleSignUp', );
+      setIsLoading(false);
+
       showAlert({title: 'Login', message: 'All fields are required'});
     }
   }, [isValid, registration, navigation]);
@@ -230,16 +246,21 @@ const Login = () => {
                 </Block>
               </View>
 
-              <Button
-                marginVertical={sizes.s}
-                marginHorizontal={sizes.sm}
-                gradient={gradients.primary}
-                onPress={handleSignUp}
-                disabled={Object.values(isValid).includes(false)}>
-                <Text bold white transform="uppercase">
-                  {t('common.signin')}
-                </Text>
-              </Button>
+              {isLoading ? (
+                <ActivityIndicator size={30} color={'green'} />
+              ) : (
+                <Button
+                  marginVertical={sizes.s}
+                  marginHorizontal={sizes.sm}
+                  gradient={gradients.primary}
+                  onPress={handleSignUp}
+                  disabled={Object.values(isValid).includes(false)}>
+                  <Text bold white transform="uppercase">
+                    {t('common.signin')}
+                  </Text>
+                </Button>
+              )}
+
               <Button
                 primary
                 outlined
